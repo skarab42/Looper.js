@@ -13,6 +13,13 @@ Loops features : unlimited tracks, overdubing, skip too short track, ...
 
 ![screenshot](/images/screen.png?raw=true)
 
+###Work In Progress
+
+- recording individual loop (wav)
+- recording complete session (wav)
+- playing loop in a sequencer
+- patch maker for filters
+
 
 
 (excuse me for my bad English)
