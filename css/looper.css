@@ -1,0 +1,349 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    color: #555;
+    font: 400 85% Helvetica,Arial,Tahoma,Sans-Serif;
+}
+
+/* ------------------------------------------------------------------------- */
+
+input[type="range"] {
+    -webkit-appearance: none;
+    border-top: 1px #ccc solid;
+    background: transparent;
+    background-color: #fff;
+    outline: none; 
+    height: 2px;
+}
+
+input[type="range"]::-moz-range-track {
+    border: inherit;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 10px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    border: 1px #ccc solid;
+    box-shadow: #999 1px 1px 1px;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eee), color-stop(100%, #ccc));
+    background-image: -webkit-linear-gradient(top , #eee 0, #ccc 100%); 
+    background-image: linear-gradient(to bottom, #eee 0, #ccc 100%); 
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px #ccc solid;
+    background-image: linear-gradient(to bottom, #eee 0, #ccc 100%);
+}
+
+/* ------------------------------------------------------------------------- */
+
+#main {
+	margin: 10px;
+}
+
+/* ------------------------------------------------------------------------- */
+
+#looper .panel
+{
+    float: left;
+    width: 342px;
+    margin: 10px;
+    border-radius: 6px;
+    background-color: #eee;
+    border: 1px #ddd solid;
+    text-shadow: #fff 1px 1px 1px;
+}
+
+#looper .panel .panel
+{
+    margin: 0;
+    width: 340px;
+    margin-top: 10px;
+    border-width: 1px 0 0 0;
+}
+
+#looper .panel .title
+{
+    margin: 10px;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#looper .panel .title i
+{
+    float: left;
+    cursor: pointer;
+    margin-top: 3px;
+    margin-right: 10px;
+}
+
+#looper .panel .title i.mute,
+#looper .panel .title i.activate,
+#looper .panel .title i.remove
+{
+    color: red;
+    float: right;
+    margin-right: 0px;
+}
+
+#looper .panel .title i.activate.deactivated,
+#looper .panel .title i.mute.muted
+{
+    color: #ccc;
+}
+
+#looper .panel .title i.activate
+{
+    float: right;
+}
+
+#looper .panel .panel .title i.remove
+{
+    float: left;
+}
+
+#looper .panel .content
+{
+    padding: 10px 0;
+    border-top: 1px #ddd solid;
+}
+
+/* ------------------------------------------------------------------------- */
+
+#looper .panel .widget
+{
+    clear: both;
+    height: 22px;
+    display: block;
+    line-height: 22px;
+}
+
+#looper .panel .widget span,
+#looper .panel .widget input,
+#looper .panel .widget select,
+#looper .panel .widget button,
+#looper .panel .widget canvas
+{
+    float: left;
+    width: 100px;
+    display: inline-block;
+}
+
+#looper .panel .widget span {
+    margin-left: 10px;
+}
+
+#looper .panel .widget select,
+#looper .panel .widget button
+{
+    height: 20px;
+    cursor: pointer;
+}
+
+#looper .panel .widget input,
+#looper .panel .widget select,
+#looper .panel .widget canvas
+{
+    width: 150px;
+    margin: 0 10px;
+}
+
+#looper .panel .widget input[type="range"]
+{
+    margin-top: 10px;
+}
+
+#looper .panel .widget canvas
+{
+    height: 10px;
+    margin-top: 6px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px #ddd solid;
+}
+
+#looper .panel .widget button,
+#looper .panel .widget span.value
+{
+    width: 50px;
+}
+
+#looper .panel .widget span.value
+{
+    text-align: right;
+    margin: 0 10px 0 0;
+}
+
+/* ------------------------------------------------------------------------- */
+
+#looper #metronome .title i.fa-bell 
+{
+    float: none;
+}
+
+#looper #metronome.highlight .title span
+{
+    color: red;
+}
+
+#looper #metronome.firstBeat .title span
+{
+    color: green;
+}
+
+#looper #metronome .widget {
+    display: inline-block;
+}
+
+#looper #metronomeTempo {
+    text-align: center;
+}
+
+#looper #metronomeTempo,
+#looper #metronomeBeats,
+#looper #metronome span.label {
+    width: 45px;
+}
+
+#looper  #metronome .widget button {
+    width: 90px;
+}
+
+#looper #metronome span.value {
+    display: none;
+}
+
+/* ------------------------------------------------------------------------- */
+
+#looper .loop {
+    text-align: center;
+    padding-top: 10px;
+    border-top: 1px #ccc solid;
+}
+
+#looper .loop button {
+    cursor: pointer;
+}
+
+#looper .loop button
+{
+    color: #666;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+    background-color: #ddd;
+    border: 2px #fff solid;
+    text-shadow: #fff 1px 1px 1px;
+}
+
+#looper .loop .mainButton:hover,
+#looper .loop .stopButton:hover 
+{
+    color: #666;
+    background-color: #eee;
+    border: 2px #ccc solid;
+    text-shadow: #fff -1px -1px 1px;
+}
+
+#looper .loop .mainButton 
+{
+    width: 100px;
+    height: 100px;
+    font-size: 1.2em;
+    border-radius: 50px;
+}
+
+#looper .highlight .loop .mainButton 
+{
+    border-color: red;
+}
+
+#looper .highlight.firstBeat .loop .mainButton 
+{
+    border-color: green;
+}
+
+#looper .playing .loop .mainButton 
+{
+    background-color: green;
+}
+
+#looper .recording .loop .mainButton 
+{
+    background-color: red;
+}
+
+#looper .recording.overdubbing .loop .mainButton 
+{
+    background-color: orange;
+}
+
+#looper .loop .stopButton 
+{
+    width: 40px;
+    height: 40px;
+    margin-top: 10px;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+#looper .loop .timeLineWrapper
+{
+    height: 20px;
+    margin: 10px;
+    border-radius: 6px;
+    background-color: #ccc;
+    border: 1px #fff solid;
+}
+
+#looper .loop .timeLine
+{
+    width: 0px;
+    height: 18px;
+    border-radius: 6px;
+    background-color: red;
+}
+
+#looper .loop .timeLine.firstBeat
+{
+    background-color: green;
+}
+
+#looper .panel .gainWrapper .title {
+    border-bottom: 1px #ccc solid;
+}
+
+#looper .panel .loop .widget {
+    display: inline-block;
+}
+
+#looper .panel .loop span.label,
+#looper .panel .loop .widget select {
+    width: 45px;
+}
+
+#looper .panel .loop span.value {
+    display: none;
+}
+
+/* ------------------------------------------------------------------------- */
+
+#controls {
+    float: left;
+}
