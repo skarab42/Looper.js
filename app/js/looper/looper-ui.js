@@ -757,6 +757,7 @@
 			step : 1,
 		});
 		ui.metronome.beats  = new instance.Select('metronomeBeats', 'beats', metronome.getBeatsArray(), 'apply to all', metronome.beats);
+		ui.metronome.gain   = new instance.Input('metronomeGain', '"bip" volume', 'gain', '0.8', '%');
 
 		// button title
 		ui.metronome.beats.$button.attr('title', 'Only on EMPTY loop!');
@@ -766,8 +767,15 @@
 		ui.metronome.panel.$titleHTML.prepend(ui.metronome.icon);
 		ui.metronome.panel.append(ui.metronome.tempo);
 		ui.metronome.panel.append(ui.metronome.beats);
+		ui.metronome.panel.append(ui.metronome.gain);
 
 		// events
+
+		ui.metronome.gain.onInput(function(value) {
+			metronome.setGain(value);
+			ui.metronome.gain.updateValue();
+		});
+
 		ui.metronome.mute.on('click', function() {
 			metronome.toggleMute();
 			ui.metronome.mute.toggleClass('muted');
@@ -826,24 +834,31 @@
 			var panel = LooperUI().getLoopPanel(loop);
 
 			panel.panel.$wrapper.addClass('highlight');
-
+			
 			if (metronome.beatsCount % loop.beats == 1)
 			{
 				panel.panel.$wrapper.addClass('firstBeat');
 			}
 
+			// remove class
+			window.setTimeout(function() 
+			{
+				panel.panel.$wrapper.removeClass('highlight firstBeat');
+			}, 100);
+
 			if (loop.isOverdubbing()) {
 				panel.panel.$wrapper.addClass('overdubbing');
 			}
-		}
-		
-		// remove class
-		window.setTimeout(function() 
-		{
-			loop && panel.panel.$wrapper.removeClass('highlight firstBeat');
-		}, 100);
 
-		// playing loop
+			if (loop.isLocked()) {
+				panel.panel.$wrapper.addClass('locked');
+			}
+			else {
+				panel.panel.$wrapper.removeClass('locked');
+			}
+		}
+
+		// playing loop time line
 		for (var i in loops.loops) {
 			var loop2 = loops.loops[i];
 
@@ -965,10 +980,28 @@
 			{
 				panel.$wrapper.removeClass('recording');
 			}
+
+			if (loop.isOverdubbing()) {
+				panel.$wrapper.addClass('overdubbing');
+			}
+			else
+			{
+				panel.$wrapper.removeClass('overdubbing');
+			}
+
+			if (loop.isLocked()) {
+				panel.$wrapper.addClass('locked');
+			}
+			else
+			{
+				panel.$wrapper.removeClass('locked');
+			}
 		});
 
 		panel.$stopButton.on('click', function() {
 			loop.stop();
+			
+			panel.$wrapper.removeClass('locked');
 			panel.$wrapper.removeClass('playing');
 			panel.$wrapper.removeClass('recording');
 			panel.$wrapper.removeClass('overdubbing');

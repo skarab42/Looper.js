@@ -229,6 +229,14 @@ input[type="range"]::-moz-range-thumb {
     display: none;
 }
 
+#looper #metronome label[for=metronomeGain] span.label {
+    width: 100px;
+}
+
+#looper #metronome label[for=metronomeGain] span.value {
+    display: inline-block;
+}
+
 /* ------------------------------------------------------------------------- */
 
 #looper .loop {
@@ -281,17 +289,27 @@ input[type="range"]::-moz-range-thumb {
 
 #looper .playing .loop .mainButton 
 {
-    background-color: green;
+    color: green;
 }
 
 #looper .recording .loop .mainButton 
 {
-    background-color: red;
+    color: red;
 }
 
-#looper .recording.overdubbing .loop .mainButton 
+#looper .overdubbing .loop .mainButton 
 {
-    background-color: orange;
+    color: orange;
+}
+
+#looper .recording.locked .loop .mainButton 
+{
+    color: blue;
+}
+
+#looper .highlight.recording.locked .loop .mainButton 
+{
+    border-color: blue;
 }
 
 #looper .loop .stopButton 

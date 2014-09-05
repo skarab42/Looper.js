@@ -1204,8 +1204,18 @@
 		// mute
 		this.mute(mute || false);
 
+		// gain node for internal sound
+		this.gain = context.createGain();
+
+		instance.connect(this.gain, context);
+
 		// reset
 		this.reset();
+	};
+	
+	// set / get gain
+	Looper.prototype.Metronome.prototype.setGain = function(value, time) {
+		instance.setGain(this.gain, value, time);
 	};
 
 	// beats table
@@ -1280,7 +1290,7 @@
 	Looper.prototype.Metronome.prototype.sheduleInternalPlay = function(time, frequency) {
 		var o = context.createOscillator();
 		o.frequency.value = metronome.isFirstBeat() ? 440 : 220;
-		o.connect(context.destination);
+		o.connect(this.gain);
 		o.start(metronome.nextBeatTime);
 		o.stop(metronome.nextBeatTime + 0.05);
 	};
