@@ -18,6 +18,8 @@ Loops features : unlimited tracks, overdubing, skip too short track, ...
 
 ###Work In Progress
 
+- add/remove loop
+- add/remove track on loop
 - recording individual loop (wav)
 - recording complete session (wav)
 - playing loop in a sequencer
