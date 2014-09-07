@@ -16,9 +16,10 @@ Loops features : unlimited tracks, overdubing, skip too short track, ...
 ![screenshot](/images/screen.png?raw=true)
 
 
-###Work In Progress
+Work In Progress
+----------------
 
-- add/remove loop
+- ~~add/remove loop~~ done!
 - add/remove track on loop
 - recording individual loop (wav)
 - recording complete session (wav)
@@ -26,7 +27,8 @@ Loops features : unlimited tracks, overdubing, skip too short track, ...
 - patch maker for filters
 
 
-###Inspiration / Credits / Tutorials
+Inspiration / Credits / Tutorials
+---------------------------------
 
 - http://webaudioapi.com/
 - http://webaudiodemos.appspot.com/
@@ -40,5 +42,6 @@ Loops features : unlimited tracks, overdubing, skip too short track, ...
 - http://chimera.labs.oreilly.com/books/1234000001552/index.html
 - https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
 
+----------
 
 (excuse me for my bad English)
