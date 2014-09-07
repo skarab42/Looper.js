@@ -26,6 +26,7 @@ Loops features : unlimited tracks, overdubing, skip too short track, ...
 
 ###Inspiration / Credits / Tutorials
 
+- http://webaudioapi.com/
 - http://webaudiodemos.appspot.com/
 - http://forestmist.org/share/web-audio-api-demo/
 - http://forestmist.org/blog/web-audio-api-loops/
