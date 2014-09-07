@@ -1,159 +1,159 @@
 /*
-	looper-app.js - 2014
+    looper-app.js - 2014
 
-	CopyLeft, License etc... All right! (sic)
+    CopyLeft, License etc... All right! (sic)
 
-	Written by Sébastien Mischler (aka skarab)
+    Written by Sébastien Mischler (aka skarab)
 */
 
 (function (window) {
-	// ------------------------------------------------------------------------
-	// globals
-	// ------------------------------------------------------------------------
-	var version  = '1.0'; // Looper App version
-	var instance = null;  // Looper App instance (singleton)
-	var context  = null;  // global audio context
-	var looper   = null;  // Looper instance (singleton)
-	var looperUI = null;  // Looper UI instance (singleton)
+    // ------------------------------------------------------------------------
+    // globals
+    // ------------------------------------------------------------------------
+    var version  = '1.0'; // Looper App version
+    var instance = null;  // Looper App instance (singleton)
+    var context  = null;  // global audio context
+    var looper   = null;  // Looper instance (singleton)
+    var looperUI = null;  // Looper UI instance (singleton)
 
-	// ------------------------------------------------------------------------
-	// LooperApp (namespace | singleton)
-	// ------------------------------------------------------------------------
-	function LooperApp() {
-		// singleton
-		if (instance) {
-			return instance;
-		}
+    // ------------------------------------------------------------------------
+    // LooperApp (namespace | singleton)
+    // ------------------------------------------------------------------------
+    function LooperApp() {
+        // singleton
+        if (instance) {
+            return instance;
+        }
 
-		// force object instantiation
-		if(! (this instanceof LooperApp)) {
-			return new LooperApp();
-		}
+        // force object instantiation
+        if(! (this instanceof LooperApp)) {
+            return new LooperApp();
+        }
 
-		// instance
-		instance = this;
+        // instance
+        instance = this;
 
-		// Looper instance (singleton)
-		looper = Looper();  
+        // Looper instance (singleton)
+        looper = Looper();  
 
-		// Looper UI instance (singleton)
-		looperUI = LooperUI(); 
+        // Looper UI instance (singleton)
+        looperUI = LooperUI(); 
 
-		// graphs collection
-		this.graphs = {};
-	};
+        // graphs collection
+        this.graphs = {};
+    };
 
-	// ------------------------------------------------------------------------
-	// create/register AudioGraph
-	// ------------------------------------------------------------------------
-	LooperApp.prototype.createAudioGraph = function(name) {
-		// AudioGrap
-		var graph = new looper.AudioGraph();
+    // ------------------------------------------------------------------------
+    // create/register AudioGraph
+    // ------------------------------------------------------------------------
+    LooperApp.prototype.createAudioGraph = function(name) {
+        // AudioGrap
+        var graph = new looper.AudioGraph();
 
-		// gain analizer
-		var analizer = new looper.GainAnalizer(name, looperUI.gainProcessor);
+        // gain analizer
+        var analizer = new looper.GainAnalizer(name, looperUI.gainProcessor);
 
-		// attach after graph filters
-		analizer.attach(graph.merger);
+        // attach after graph filters
+        analizer.attach(graph.merger);
 
-		// register
-		return instance.graphs[name] = {
-			graph    : graph,
-			analizer : analizer
-		};
-	};
+        // register
+        return instance.graphs[name] = {
+            graph    : graph,
+            analizer : analizer
+        };
+    };
 
-	LooperApp.prototype.getAudioGraph = function(name) {
-		return instance.graphs[name] || null;
-	};
+    LooperApp.prototype.getAudioGraph = function(name) {
+        return instance.graphs[name] || null;
+    };
 
-	LooperApp.prototype.getGraph = function(name) {
-		return instance.graphs[name] ? instance.graphs[name].graph : null;
-	};
+    LooperApp.prototype.getGraph = function(name) {
+        return instance.graphs[name] ? instance.graphs[name].graph : null;
+    };
 
-	LooperApp.prototype.getAnalizer = function(name) {
-		return instance.graphs[name] ? instance.graphs[name].analizer : null;
-	};
+    LooperApp.prototype.getAnalizer = function(name) {
+        return instance.graphs[name] ? instance.graphs[name].analizer : null;
+    };
 
-	// ------------------------------------------------------------------------
-	// add loop
-	// ------------------------------------------------------------------------
-	LooperApp.prototype.addLopp = function() {
-		// create and add a new loop in Looper.Loops "collection"
-		var loop = looper.Loops().add();
-		var id   = 'loop_' + loop.id;
+    // ------------------------------------------------------------------------
+    // add loop
+    // ------------------------------------------------------------------------
+    LooperApp.prototype.addLopp = function() {
+        // create and add a new loop in Looper.Loops "collection"
+        var loop = looper.Loops().add();
+        var id   = 'loop_' + loop.id;
 
-		// create loop AudioGraph
-		var graph = instance.createAudioGraph(id).graph;
+        // create loop AudioGraph
+        var graph = instance.createAudioGraph(id).graph;
 
-		// set graph as loop destination
-		loop.setDestination(graph);
-		
-		// connect to output graph
-		looper.connect(graph, instance.getGraph('output'));
+        // set graph as loop destination
+        loop.setDestination(graph);
+        
+        // connect to output graph
+        looper.connect(graph, instance.getGraph('output'));
 
-		// user interface
-		looperUI.createLoopPanel(id, 'loop', loop).appendTo('#loopsWrapper');
-		
-		var panel = looperUI.getLoopPanel(loop);
+        // user interface
+        looperUI.createLoopPanel(id, 'loop', loop).appendTo('#loopsWrapper');
+        
+        var panel = looperUI.getLoopPanel(loop);
 
-		panel.volume.toggle();
+        panel.volume.toggle();
 
-		panel.filtersPanel.toggle();
-	};
+        panel.filtersPanel.toggle();
+    };
 
-	// ------------------------------------------------------------------------
-	// initialization
-	// ------------------------------------------------------------------------
-	LooperApp.prototype.init = function(stream) {
-		// global audio context
-		context = looper.getContext();
-		
-		// mono to stereo microphone stream
-		var microphone = looper.microphone(stream);
+    // ------------------------------------------------------------------------
+    // initialization
+    // ------------------------------------------------------------------------
+    LooperApp.prototype.init = function(stream) {
+        // global audio context
+        context = looper.getContext();
+        
+        // mono to stereo microphone stream
+        var microphone = looper.microphone(stream);
 
-		// create input/output AudioGraph
-		var input  = instance.createAudioGraph('input').graph;
-		var output = instance.createAudioGraph('output').graph;
+        // create input/output AudioGraph
+        var input  = instance.createAudioGraph('input').graph;
+        var output = instance.createAudioGraph('output').graph;
 
-		// connexions
-		looper.connect(microphone, input);
-		looper.connect(input, output);
-		looper.connect(output, context);
+        // connexions
+        looper.connect(microphone, input);
+        looper.connect(input, output);
+        looper.connect(output, context);
 
-		// Loops instance (singleton)
-		var loops = looper.Loops();
+        // Loops instance (singleton)
+        var loops = looper.Loops();
 
-		// Metronome init (tempo, beats per bar)
-		var metronome = looper.Metronome(90, 4);
+        // Metronome init (tempo, beats per bar)
+        var metronome = looper.Metronome(90, 4);
 
-		// sheduler callback
-		metronome.shedulePlay = loops.shedulePlay;
+        // sheduler callback
+        metronome.shedulePlay = loops.shedulePlay;
 
-		// recorder
-		var recorder = looper.Recorder(input);
+        // recorder
+        var recorder = looper.Recorder(input);
 
-		// on audio process callback
-		recorder.onaudioprocess = loops.record;
+        // on audio process callback
+        recorder.onaudioprocess = loops.record;
 
-		// user interface -----------------------------------------------------
+        // user interface -----------------------------------------------------
 
-		looperUI.createPanel('input').appendTo('#inputWrapper').toggle();
-		looperUI.createPanel('output').appendTo('#outputWrapper').toggle();
-		looperUI.createMetronomePanel().appendTo('#metronomeWrapper');
+        looperUI.createPanel('input').appendTo('#inputWrapper').toggle();
+        looperUI.createPanel('output').appendTo('#outputWrapper').toggle();
+        looperUI.createMetronomePanel().appendTo('#metronomeWrapper');
 
-		// metronome drawing (on each beat)
-		metronome.draw = looperUI.metronomeDraw;
+        // metronome drawing (on each beat)
+        metronome.draw = looperUI.metronomeDraw;
 
-		// first loop
-		instance.addLopp();
-		instance.addLopp();
-		instance.addLopp();
-	};
+        // first loop
+        instance.addLopp();
+        instance.addLopp();
+        instance.addLopp();
+    };
 
-	// ------------------------------------------------------------------------
-	// exports
-	// ------------------------------------------------------------------------
-	window.LooperApp = LooperApp;
+    // ------------------------------------------------------------------------
+    // exports
+    // ------------------------------------------------------------------------
+    window.LooperApp = LooperApp;
 
 })(this);
