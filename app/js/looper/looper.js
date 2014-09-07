@@ -916,18 +916,13 @@
 		time -= context.currentTime;
 		time *= 1000;
 
-		console.log('time', time);
-
 		this.timer = window.setTimeout(function() {
-			console.log('real start recording');
 			self.locked = false;
 		}, time);
 	};
 
 	// shedule recording on first beat
 	Looper.prototype.Loop.prototype.startRecording = function() {
-		console.log('start recording:', this.id);
-
 		// set current loop id
 		loops.setCurrentId(this.id);
 
@@ -944,8 +939,6 @@
 	};
 
 	Looper.prototype.Loop.prototype.stopRecording = function() {
-		console.log('stop recording:', this.id);
-			
 		// stop recording
 		window.clearTimeout(this.timer);
 		this.recording = false;
@@ -958,10 +951,6 @@
 		// track min duration
 		if (track && track.duration < this.minDuration)
 		{
-			// debug
-			console.log('track too short :', track.duration);
-			console.log('remove track :', this.currentTrack);
-			
 			// remove last track
 			this.tracks.splice(-1, 1); 
 			this.currentTrack--;
@@ -970,8 +959,6 @@
 
 	// start/stop playing
 	Looper.prototype.Loop.prototype.startPlaying = function() {
-		console.log('start playing:', this.id);
-			
 		// start playing
 		this.playing = true;
 
@@ -983,8 +970,6 @@
 	};
 
 	Looper.prototype.Loop.prototype.stopPlaying = function() {
-		console.log('stop playing:', this.id);
-			
 		// stop playing
 		this.playing = false;
 
@@ -1168,9 +1153,6 @@
 	    // record limit
 	    if (tracks[loop.currentTrack].duration > loop.duration - 0.025)
 	    {
-	    	// debug
-	    	console.log('overdub :', loop.currentTrack);
-
 	    	// overdub
 	    	loop.incrementTrack();
 	    }
