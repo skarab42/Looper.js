@@ -67,6 +67,10 @@
         return instance.graphs[name] || null;
     };
 
+    LooperApp.prototype.removeAudioGraph = function(name) {
+        instance.graphs[name] = null;
+    };
+
     LooperApp.prototype.getGraph = function(name) {
         return instance.graphs[name] ? instance.graphs[name].graph : null;
     };
@@ -78,7 +82,7 @@
     // ------------------------------------------------------------------------
     // add loop
     // ------------------------------------------------------------------------
-    LooperApp.prototype.addLopp = function() {
+    LooperApp.prototype.addLoop = function() {
         // create and add a new loop in Looper.Loops "collection"
         var loop = looper.Loops().add();
         var id   = 'loop_' + loop.id;
@@ -100,6 +104,28 @@
         panel.volume.toggle();
 
         panel.filtersPanel.toggle();
+    };
+
+    // ------------------------------------------------------------------------
+    // remove loop
+    // ------------------------------------------------------------------------
+    LooperApp.prototype.removeLoop = function(id) {
+        var loops = looper.Loops();
+        var loop  = loops.getLoop(id);
+        var panel = looperUI.getLoopPanel(loop);
+        var graph = instance.getGraph('loop_' + loop.id);
+        
+        // disconnect loop graph to output graph
+        looper.disconnect(graph, instance.getGraph('output'));
+
+        // remove graph
+        instance.removeAudioGraph('loop_' + loop.id);
+
+        // remove loop
+        loops.remove(loop);
+
+        // remove panel
+        panel.panel.$wrapper.remove();
     };
 
     // ------------------------------------------------------------------------
@@ -146,9 +172,7 @@
         metronome.draw = looperUI.metronomeDraw;
 
         // first loop
-        instance.addLopp();
-        instance.addLopp();
-        instance.addLopp();
+        instance.addLoop();
     };
 
     // ------------------------------------------------------------------------

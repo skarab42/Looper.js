@@ -260,6 +260,11 @@ input[type="range"]::-moz-range-thumb {
     text-shadow: #fff 1px 1px 1px;
 }
 
+#loopsWrapper .panel .title i.remove
+{
+    float: left;
+}
+
 #looper .loop .mainButton:hover,
 #looper .loop .stopButton:hover 
 {

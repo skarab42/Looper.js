@@ -158,23 +158,28 @@
     // ------------------------------------------------------------------------
     // Buttons
     // ------------------------------------------------------------------------
-    LooperUI.prototype.muteButton = function(id) {
-        var img    = (id == 'input') ? 'microphone' : 'volume-up';
-        var button = $('<i class="fa fa-' + img + ' mute"/>');
-
-        return button.attr('title', 'mute / unmute');
+    LooperUI.prototype.button = function(type, title) {
+        return $('<i class="fa fa-' + type + '"/>').attr('title', title);
     };
 
-    LooperUI.prototype.activateButton = function() {
-        var button = $('<i class="fa fa-power-off activate"/>');
-
-        return button.attr('title', 'deactivate / activate');
+    LooperUI.prototype.muteButton = function(title) {
+        return this.button('volume-up mute', title);
     };
 
-    LooperUI.prototype.removeButton = function() {
-        var button = $('<i class="fa fa-trash-o remove"/>');
+    LooperUI.prototype.muteMicrophoneButton = function(title) {
+        return this.button('microphone mute', title);
+    };
 
-        return button.attr('title', 'remove');
+    LooperUI.prototype.activateButton = function(title) {
+        return this.button('power-off activate', title);
+    };
+
+    LooperUI.prototype.removeButton = function(title) {
+        return this.button('trash-o remove', title);
+    };
+
+    LooperUI.prototype.addButton = function(title) {
+        return this.button('plus-square-o add', title);
     };
 
     // ------------------------------------------------------------------------
@@ -583,8 +588,8 @@
 
         // elements
         var panel  = new instance.Panel(filterId, name, id + 'FilterPanel');
-        var trash  = instance.removeButton();
-        var mute   = instance.activateButton();
+        var trash  = instance.removeButton('remove filter');
+        var mute   = instance.activateButton('activate / deactivate');
 
         // Convolver
         if (name == 'Cabinet' || name == 'Convolver') {
@@ -602,8 +607,10 @@
         });
 
         trash.on('click', function() {
-            LooperApp().getGraph(id).removeFilter(filterObject);
-            panel.$wrapper.remove();
+            if (confirm('delete ' + name + ' filter ?')) {
+                LooperApp().getGraph(id).removeFilter(filterObject);
+                panel.$wrapper.remove();
+            }
         });
 
         // filter properties
@@ -642,7 +649,7 @@
         // elements
         ui[id].filtersPanel = new instance.Panel(id + 'FiltersPanel', 'filters');
         ui[id].filters      = new instance.Select(id + 'Filters', 'filters (tuna.js)',  Looper().getFilters(), 'add');
-        ui[id].activate     = instance.activateButton();
+        ui[id].activate     = instance.activateButton('activate / deactivate all filters');
 
         // appends
         ui[id].filtersPanel.$title.append(ui[id].activate);
@@ -680,8 +687,16 @@
         ui[id].gainL  = new instance.Input(id + 'GainL' , 'gain [left]'  , 'gain', '1'  , '%');
         ui[id].gainR  = new instance.Input(id + 'GainR' , 'gain [right]' , 'gain', '1'  , '%');
         ui[id].gainLR = new instance.Input(id + 'GainLR', 'gain [both]'  , 'gain', '1'  , '%');
-        ui[id].mute   = instance.muteButton(id);
-        ui[id].mute2  = instance.muteButton(id);
+        
+        if (id == 'input') {
+            ui[id].mute   = instance.muteMicrophoneButton('mute / unmute');
+            ui[id].mute2  = instance.muteMicrophoneButton('mute / unmute');
+        }
+        else
+        {
+            ui[id].mute   = instance.muteButton('mute / unmute');
+            ui[id].mute2  = instance.muteButton('mute / unmute');
+        }
 
         // filter panel
         instance.createFiltersPanel(id);
@@ -749,7 +764,7 @@
         // main panel
         ui.metronome.panel  = new instance.Panel('metronome');
         
-        ui.metronome.mute   = instance.muteButton('metronome');
+        ui.metronome.mute   = instance.muteButton('mute / unmute');
         ui.metronome.icon   = instance.metronomeIcon();
         ui.metronome.tempo  = new instance.Input('metronomeTempo', 'tempo', 'number', metronome.tempo, null, {
             min  : metronome.tempoMin,
@@ -956,7 +971,9 @@
         panel.$timeLineWrapper = $('<div class="timeLineWrapper"></div>');
         panel.$timeLine        = $('<div class="timeLine"></div>');
         panel.beats            = new instance.Select(id + 'Beats', 'beats', metronome.getBeatsArray(), null, metronome.beats);
-        
+        panel.add              = instance.addButton('add new loop');
+        panel.remove           = instance.removeButton('remove loop');
+
         // append elements
         panel.$loop.append(panel.$stopButton);
         panel.$loop.append(panel.$mainButton);
@@ -964,6 +981,8 @@
         panel.$loop.append(panel.$timeLineWrapper);
         panel.$loop.append(panel.beats.$wrapper);
         panel.$title.after(panel.$loop);
+        panel.$title.append(panel.add);
+        panel.$title.append(panel.remove);
 
         // events
         panel.$mainButton.on('click', function() {
@@ -1005,6 +1024,21 @@
             panel.$wrapper.removeClass('playing');
             panel.$wrapper.removeClass('recording');
             panel.$wrapper.removeClass('overdubbing');
+        });
+
+        panel.add.on('click', function() {
+            LooperApp().addLoop();
+        });
+
+        panel.remove.on('click', function() {
+            if (Looper().Loops().loops.length == 1) {
+                alert('You can not remove the last loop, use reset instead.');
+                return;
+            }
+
+            if (confirm('remove ' + (loop.name || '') + ' loop ?')) {
+                LooperApp().removeLoop(loop.id);
+            }
         });
 
         panel.beats.on('change', function() {

@@ -1096,6 +1096,32 @@
         return loop;
     };
 
+    // get loop position
+    Looper.prototype.Loops.prototype.getLoopPosition = function(loop) {
+        // for each filters
+        for (var id in this.loops) {
+            // this is the target -> return
+            if (this.loops[id].id == loop.id) {
+                return parseInt(id);
+            }
+        }
+
+        // not found
+        return null;
+    }
+
+    // remove loop
+    Looper.prototype.Loops.prototype.remove = function(loop) {
+        // stop playing/recording loop
+        loop.stop();
+        
+        // get filter position
+        var loopPosition = this.getLoopPosition(loop);
+        
+        // remove loop from array
+        this.loops.splice(loopPosition, 1);
+    };
+
     Looper.prototype.Loops.prototype.each = function(callback, scope) {
         scope = scope || this;
 
