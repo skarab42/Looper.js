@@ -56,6 +56,13 @@ input[type="range"]::-moz-range-thumb {
     margin: 10px;
 }
 
+#title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: 1px #ccc solid;
+}
+
 /* ------------------------------------------------------------------------- */
 
 #looper .panel
